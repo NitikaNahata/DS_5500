@@ -1,0 +1,79 @@
+import pandas as pd
+import numpy as np
+
+def prepare_data_music_tracks(df: pd.DataFrame):
+    # Function to safely convert values to float and check range
+    def convert_to_float(val, min_val=None, max_val=None):
+        try:
+            val = float(val)
+            if min_val is not None and max_val is not None:
+                if not (min_val <= val <= max_val):
+                    return None  # Return None if out of range
+            return round(val, 4)  # Round to 4 decimal places for DECIMAL(5,4)
+        except (ValueError, TypeError):
+            return None
+
+    # Function to safely convert values to integer and check range
+    def convert_to_int(val, min_val=None, max_val=None):
+        try:
+            val = int(float(val))  # Handles cases like "1.0"
+            if min_val is not None and max_val is not None:
+                if not (min_val <= val <= max_val):
+                    return None  # Return None if out of range
+            return val
+        except (ValueError, TypeError):
+            return None
+
+    # Function to process genres (ensure it's a list)
+    def process_genres(val):
+        if isinstance(val, list):
+            return val
+        elif isinstance(val, str):
+            # Convert comma-separated string into a list
+            return [genre.strip() for genre in val.split(",")]
+        else:
+            return []
+
+    # Initialize a list to hold all the prepared data for each row
+    all_data = []
+
+    # Iterate over each row in the DataFrame
+    for idx, row_data in df.iterrows():
+        # Prepare the JSON structure for each row
+        data = {
+            "id": row_data.get("id", None),  # TEXT (string-based ID)
+            "artist_name": row_data.get("artist_name", None),  # TEXT (non-nullable)
+            "track_name": row_data.get("track_name", None),  # TEXT (non-nullable)
+            
+            # DECIMAL(5,4) fields with range checks between 0 and 1
+            "danceability": convert_to_float(row_data.get("danceability"), 0, 1),
+            "energy": convert_to_float(row_data.get("energy"), 0, 1),
+            
+            # INTEGER fields with specific ranges
+            "key": convert_to_int(row_data.get("key"), 0, 11),
+            
+            # DECIMAL(6,2) for loudness (no specific range in schema)
+            "loudness": convert_to_float(row_data.get("loudness")),
+            
+            # Mode must be an INTEGER and either 0 or 1
+            "mode": convert_to_int(row_data.get("mode"), 0, 1),
+            
+            # DECIMAL(5,4) fields with range checks between 0 and 1
+            "speechiness": convert_to_float(row_data.get("speechiness"), 0, 1),
+            "acousticness": convert_to_float(row_data.get("acousticness"), 0, 1),
+            "instrumentalness": convert_to_float(row_data.get("instrumentalness"), 0, 1),
+            "liveness": convert_to_float(row_data.get("liveness"), 0, 1),
+            "valence": convert_to_float(row_data.get("valence"), 0, 1),
+            
+            # DECIMAL(12,4) for duration_ms (no specific range in schema)
+            "duration_ms": convert_to_float(row_data.get("duration_ms")),
+            
+            # Genres must be a list of strings
+            "genres": process_genres(row_data.get("genres", []))
+        }
+
+        # Append the prepared data for this row to the list
+        all_data.append(data)
+
+    # Return the list of dictionaries (ready for insertion into the database)
+    return all_data

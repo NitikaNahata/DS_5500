@@ -3,6 +3,14 @@
 ## 📌 Overview  
 This project leverages **AI-driven mood detection** and **personalized music recommendations** to enhance Social Media posts. By analyzing the emotional tone of uploaded media and integrating user preferences via Spotify, the system provides tailored song suggestions to amplify engagement and creativity.
 
+
+## Dataset description
+Found some datasets on Kaggle which has the features of the song
+- https://www.kaggle.com/datasets/julianoorlandi/spotify-top-songs-and-audio-features
+- https://www.kaggle.com/datasets/geomack/spotifyclassification#
+- https://www.kaggle.com/datasets/yamqwe/tiktok-trending-tracks
+
+
 ---
 
 ## 🛠️ Workflow  

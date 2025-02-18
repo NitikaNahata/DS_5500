@@ -19,8 +19,7 @@ This project leverages **AI-driven mood detection** and **personalized music rec
 
 ### **Step 3: Querying Database for the song**
 - The system queries a database containing metadata for songs.  
-- The database includes features like valence, energy, and tempo for each song.
-- Also fetched the lyrics using GENIUS API and got the embeddings
+- The database includes features like valence, energy, tempo and lyrics for each song.
 
 ### **Step 4: Generating Top Recommendations**
 - Songs matching the specified feature range are retrieved from the database.  

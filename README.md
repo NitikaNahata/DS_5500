@@ -21,9 +21,9 @@ This project leverages **AI-driven mood detection** and **personalized music rec
 - The classified mood is mapped to a range of song features such as valence and energy.  
 - Example: Songs with low valence and energy are identified as suitable matches.
 
-### **Step 4: Querying RAG Database**
-- The system queries a Retrieval-Augmented Generation (RAG) database containing metadata for songs.  
-- The RAG database includes features like valence, energy, and tempo for each song.
+### **Step 4: Querying Database for the song**
+- The system queries a database containing metadata for songs.  
+- The database includes features like valence, energy, and tempo for each song.
 
 ### **Step 5: Generating Top Recommendations**
 - Songs matching the specified feature range are retrieved from the database.  

@@ -17,23 +17,20 @@ This project leverages **AI-driven mood detection** and **personalized music rec
   - Mood: *Calm and Reflective*  
   - Features: **Low Valence (0.3)**, **Low Energy (0.2)**  
 
-### **Step 3: Mapping Mood to Song Features**
-- The classified mood is mapped to a range of song features such as valence and energy.  
-- Example: Songs with low valence and energy are identified as suitable matches.
-
-### **Step 4: Querying Database for the song**
+### **Step 3: Querying Database for the song**
 - The system queries a database containing metadata for songs.  
 - The database includes features like valence, energy, and tempo for each song.
+- Also fetched the lyrics using GENIUS API and got the embeddings
 
-### **Step 5: Generating Top Recommendations**
+### **Step 4: Generating Top Recommendations**
 - Songs matching the specified feature range are retrieved from the database.  
 - The system ranks songs based on similarity to the mood features and selects the top 10 recommendations.
 
-### **Step 6: Spotify Integration**
+### **Step 5: Spotify Integration**
 - Users authenticate their Spotify account.  
 - Recommendations are refined further by cross-referencing the user's listening history, playlists, and preferences.
 
-### **Step 7: Final Output**
+### **Step 6: Final Output**
 - The system presents a list of recommended songs tailored to the uploaded media's mood and user preferences.  
 - Users can integrate these recommendations into their Instagram posts or stories seamlessly.
 

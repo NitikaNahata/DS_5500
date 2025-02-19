@@ -61,8 +61,8 @@ Follow these instructions to clone the repository and run the code:
 
 ### 1. Clone the Repository
 
-git clone https://github.com/NitikaNahata/DS_5500.git
-cd DS_5500
+- git clone https://github.com/NitikaNahata/DS_5500.git
+- cd DS_5500
 
 ### 2. Virtual Environment (Recommended)
 

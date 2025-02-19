@@ -52,3 +52,40 @@ Found some datasets on Kaggle which has the features of the song
 ---
 
 This project combines cutting-edge AI techniques with creative media personalization, offering users a seamless way to enhance their Social Media content with perfectly matched music.
+
+---
+
+## ⚙️ Setup and Installation
+
+Follow these instructions to clone the repository and run the code:
+
+### 1. Clone the Repository
+
+git clone https://github.com/NitikaNahata/DS_5500.git
+cd DS_5500
+
+### 2. Virtual Environment (Recommended)
+
+Create a virtual environment to isolate the project dependencies:
+
+python3.9 -m venv venv
+
+Activate the virtual environment:
+
+- **On Windows:**
+
+venv\Scripts\activate
+
+- **On macOS and Linux:**
+
+source venv/bin/activate
+
+### 3. Install Dependencies
+
+Install the required packages using pip:
+
+pip install -r requirements.txt
+
+### 4. Pull the Large Language Vision Model from ollama
+- Run this command in terminal -> ollama run llava:7b
+

@@ -1,0 +1,14 @@
+numpy
+pandas
+ollama
+supabase
+streamlit
+sentence-transformers
+scikit-learn
+pillow
+transformers
+torch 
+torchvision 
+timm
+spotipy
+lyricsgenius

@@ -89,3 +89,5 @@ pip install -r requirements.txt
 ### 4. Pull the Large Language Vision Model from ollama
 Run this command in terminal -> ollama run llava:7b
 
+### 5. Run the streamlit web-app
+streamlit run main.py

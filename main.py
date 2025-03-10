@@ -12,7 +12,7 @@ import streamlit as st
 import ollama
 import base64
 import asyncio
-from configurations import IMAGE_CAPTIONING_LLVM_PROMPT
+from configurations import IMAGE_CAPTIONING_LLVM_PROMPT, IMAGE_CAPTIONING_LLVM_PROMPT_V2
 
 def encode_image(image_file):
     return base64.b64encode(image_file.getvalue()).decode('utf-8')
@@ -54,13 +54,104 @@ async def main():
                     messages=[
                         {
                             'role': 'user',
-                            'content': IMAGE_CAPTIONING_LLVM_PROMPT,
+                            'content': IMAGE_CAPTIONING_LLVM_PROMPT_V2,
                             'images': [base64_image]
                         }
                     ]
                 )
                 
-                st.write("Analysis Result:")
+                st.write("Analysis Result LLaVA 7B: ")
+                st.write(response['message']['content'])
+
+
+                response = ollama.chat(
+                    model='llama3.2-vision:11b',
+                    messages=[
+                        {
+                            'role': 'user',
+                            'content': IMAGE_CAPTIONING_LLVM_PROMPT_V2,
+                            'images': [base64_image]
+                        }
+                    ]
+                )
+                
+                st.write("Analysis Result llama3.2-vision:11b:")
+                st.write(response['message']['content'])
+
+
+                response = ollama.chat(
+                    model='minicpm-v',
+                    messages=[
+                        {
+                            'role': 'user',
+                            'content': IMAGE_CAPTIONING_LLVM_PROMPT_V2,
+                            'images': [base64_image]
+                        }
+                    ]
+                )
+                
+                st.write("Analysis Result minicpm-v:")
+                st.write(response['message']['content'])
+
+
+                response = ollama.chat(
+                    model='llava-llama3:8b',
+                    messages=[
+                        {
+                            'role': 'user',
+                            'content': IMAGE_CAPTIONING_LLVM_PROMPT_V2,
+                            'images': [base64_image]
+                        }
+                    ]
+                )
+                
+                st.write("Analysis Result llava-llama3:8b:")
+                st.write(response['message']['content'])
+
+
+
+                response = ollama.chat(
+                    model='bakllava:7b',
+                    messages=[
+                        {
+                            'role': 'user',
+                            'content': IMAGE_CAPTIONING_LLVM_PROMPT_V2,
+                            'images': [base64_image]
+                        }
+                    ]
+                )
+                
+                st.write("Analysis Result bakllava:7b:")
+                st.write(response['message']['content'])
+
+
+                response = ollama.chat(
+                    model='llava-phi3',
+                    messages=[
+                        {
+                            'role': 'user',
+                            'content': IMAGE_CAPTIONING_LLVM_PROMPT_V2,
+                            'images': [base64_image]
+                        }
+                    ]
+                )
+                
+                st.write("Analysis Result lllava-phi3:")
+                st.write(response['message']['content'])
+
+
+                response = ollama.chat(
+                    model='granite3.2-vision',
+                    messages=[
+                        {
+                            'role': 'user',
+                            'content': IMAGE_CAPTIONING_LLVM_PROMPT_V2,
+                            'images': [base64_image]
+                        }
+                    ]
+                )
+                
+                st.write("Analysis Result granite3.2-vision:")
                 st.write(response['message']['content'])
         else:
             st.warning("Please upload an image and enter a prompt.")

@@ -147,8 +147,6 @@ async def main():
                 # Display the response
                 with st.expander("Gemma Reasoning: "):
                     st.write(st.session_state.response)
-                """
-
 
                 st.write("REASONING WITH QWENN !!!! ")
 
@@ -165,7 +163,6 @@ async def main():
                 with st.expander("LLama Reasoning: "):
                     st.write(response)
 
-                """
                 st.write("\nGenerating Reasoning response for Gemma...")
                 response = get_deepseek_response(LLM_REASONING_MODEL_V2, st.session_state.user_music_description, st.session_state.gemma_response, USER_INPUT_IMAGE_CAPTION_REASONING_PROMPT)
                 # Display the response

@@ -92,8 +92,8 @@ async def main():
                         }
                     ]
                 )         
-                st.write("Analysis Result LLaVA 7B: ")
-                st.write(response['message']['content'])
+                with st.expander("Analysis Result LLaVA 7B: "):
+                    st.write(response['message']['content'])
                 st.session_state.llava_response = response['message']['content']
 
                 ## LLama 3.2 Vision 11B Model
@@ -107,69 +107,170 @@ async def main():
                         }
                     ]
                 )               
-                st.write("Analysis Result llama3.2-vision:11b:")
-                st.write(response['message']['content'])
+                with st.expander("Analysis Result llama3.2-vision:11b: "):
+                    st.write(response['message']['content'])
                 st.session_state.llama_response = response['message']['content']
 
-                ## Gemma 3 Vision 27B Model
-                #response = ollama.chat(
-                #    model='gemma3:27b',
-                #    messages=[
-                #        {
-                #            'role': 'user',
-                #            'content': IMAGE_CAPTIONING_LLVM_PROMPT_V3,
-                #            'images': [base64_image]
-                #        }
-                #    ]
-                #)               
-                #st.write("Analysis Result gemma3:27b:")
-                #st.write(response['message']['content'])
-                #st.session_state.gemma_response = response['message']['content']
+                ## gemma3:12b Model
+                response = ollama.chat(
+                    model='gemma3:12b',
+                    messages=[
+                        {
+                            'role': 'user',
+                            'content': IMAGE_CAPTIONING_LLVM_PROMPT_V2,
+                            'images': [base64_image]
+                        }
+                    ]
+                )               
+                with st.expander("Analysis Result lAnalysis Result gemma3:12b: "):
+                    st.write(response['message']['content'])
+                st.session_state.gemma_response = response['message']['content']
+                
+                """
+                ## minicpm-v: Model
+                response = ollama.chat(
+                    model='minicpm-v:8b',
+                    messages=[
+                        {
+                            'role': 'user',
+                            'content': IMAGE_CAPTIONING_LLVM_PROMPT_V2,
+                            'images': [base64_image]
+                        }
+                    ]
+                )               
+                st.write("Analysis Result minicpm-v:8b :")
+                st.write(response['message']['content'])
 
-                st.write("REASONING WITH DEEPSEEK !!!! ")
+                ## llava-llama3:8b Model
+                response = ollama.chat(
+                    model='llava-llama3:8b',
+                    messages=[
+                        {
+                            'role': 'user',
+                            'content': IMAGE_CAPTIONING_LLVM_PROMPT_V2,
+                            'images': [base64_image]
+                        }
+                    ]
+                )    
+                st.write("Analysis Result llava-llama3:8b:")
+                st.write(response['message']['content'])
+
+                ## bakllava:7b Model
+                response = ollama.chat(
+                    model='bakllava:7b',
+                    messages=[
+                        {
+                            'role': 'user',
+                            'content': IMAGE_CAPTIONING_LLVM_PROMPT_V2,
+                            'images': [base64_image]
+                        }
+                    ]
+                )      
+                st.write("Analysis Result bakllava:7b:")
+                st.write(response['message']['content'])
+
+                ## lllava-phi3 Model
+                response = ollama.chat(
+                    model='llava-phi3:latest',
+                    messages=[
+                        {
+                            'role': 'user',
+                            'content': IMAGE_CAPTIONING_LLVM_PROMPT_V2,
+                            'images': [base64_image]
+                        }
+                    ]
+                )             
+                st.write("Analysis Result llava-phi3:latest:")
+                st.write(response['message']['content'])
+
+                ## granite3.2-vision Model
+                response = ollama.chat(
+                    model='granite3.2-vision:latest',
+                    messages=[
+                        {
+                            'role': 'user',
+                            'content': IMAGE_CAPTIONING_LLVM_PROMPT_V2,
+                            'images': [base64_image]
+                        }
+                    ]
+                )              
+                st.write("Analysis Result granite3.2-vision:")
+                st.write(response['message']['content'])
+                """
+
+                st.title("REASONING WITH DEEPSEEK !!!! ")
 
                 ## LLM Reasoning
-                st.write("\nGenerating Reasoning response for LLaVA...")
                 response = get_deepseek_response(LLM_REASONING_MODEL, st.session_state.user_music_description, st.session_state.llava_response, USER_INPUT_IMAGE_CAPTION_REASONING_PROMPT)
                 # Display the response
                 with st.expander("LLaVA resoning: "):
                     st.write(response)
 
-                st.write("\nGenerating Reasoning response for LLama...")
                 response = get_deepseek_response(LLM_REASONING_MODEL, st.session_state.user_music_description, st.session_state.llama_response, USER_INPUT_IMAGE_CAPTION_REASONING_PROMPT)
                 # Display the response
                 with st.expander("LLama Reasoning: "):
                     st.write(response)
-
-                """
-                st.write("\nGenerating Reasoning response for Gemma...")
+                
                 response = get_deepseek_response(LLM_REASONING_MODEL, st.session_state.user_music_description, st.session_state.gemma_response, USER_INPUT_IMAGE_CAPTION_REASONING_PROMPT)
                 # Display the response
                 with st.expander("Gemma Reasoning: "):
-                    st.write(st.session_state.response)
-
-                st.write("REASONING WITH QWENN !!!! ")
-
-                ## LLM Reasoning
-                st.write("\nGenerating Reasoning response for LLaVA...")
-                response = get_deepseek_response(LLM_REASONING_MODEL_V2, st.session_state.user_music_description, st.session_state.llava_response, USER_INPUT_IMAGE_CAPTION_REASONING_PROMPT)
-                # Display the response
-                with st.expander("LLaVA resoning: "):
                     st.write(response)
+                
 
-                st.write("\nGenerating Reasoning response for LLama...")
-                response = get_deepseek_response(LLM_REASONING_MODEL_V2, st.session_state.user_music_description, st.session_state.llama_response, USER_INPUT_IMAGE_CAPTION_REASONING_PROMPT)
+                st.title("REASONING WITH mychen76/llama3.1-intuitive-thinker:chain-of-thoughts.q5 !!!! ")
+
+                response = get_deepseek_response("mychen76/llama3.1-intuitive-thinker:chain-of-thoughts.q5", st.session_state.user_music_description, st.session_state.llava_response, USER_INPUT_IMAGE_CAPTION_REASONING_PROMPT)
+                # Display the response
+                with st.expander("Llava Reasoning: "):
+                    st.write(response)
+                
+                response = get_deepseek_response("mychen76/llama3.1-intuitive-thinker:chain-of-thoughts.q5", st.session_state.user_music_description, st.session_state.llama_response, USER_INPUT_IMAGE_CAPTION_REASONING_PROMPT)
                 # Display the response
                 with st.expander("LLama Reasoning: "):
                     st.write(response)
 
-                st.write("\nGenerating Reasoning response for Gemma...")
-                response = get_deepseek_response(LLM_REASONING_MODEL_V2, st.session_state.user_music_description, st.session_state.gemma_response, USER_INPUT_IMAGE_CAPTION_REASONING_PROMPT)
+                response = get_deepseek_response("mychen76/llama3.1-intuitive-thinker:chain-of-thoughts.q5", st.session_state.user_music_description, st.session_state.gemma_response, USER_INPUT_IMAGE_CAPTION_REASONING_PROMPT)
                 # Display the response
                 with st.expander("Gemma Reasoning: "):
-                    st.write(st.session_state.response)
-                """
+                    st.write(response)
 
+                
+
+                st.title("REASONING WITH huihui_ai/deepseek-r1-abliterated:14b !!!! ")
+
+                response = get_deepseek_response("huihui_ai/deepseek-r1-abliterated:14b", st.session_state.user_music_description, st.session_state.llava_response, USER_INPUT_IMAGE_CAPTION_REASONING_PROMPT)
+                # Display the response
+                with st.expander("llava Reasoning: "):
+                    st.write(response)
+                
+                response = get_deepseek_response("huihui_ai/deepseek-r1-abliterated:14b", st.session_state.user_music_description, st.session_state.llama_response, USER_INPUT_IMAGE_CAPTION_REASONING_PROMPT)
+                # Display the response
+                with st.expander("LLama Reasoning: "):
+                    st.write(response)
+
+                response = get_deepseek_response("huihui_ai/deepseek-r1-abliterated:14b", st.session_state.user_music_description, st.session_state.gemma_response, USER_INPUT_IMAGE_CAPTION_REASONING_PROMPT)
+                # Display the response
+                with st.expander("Gemma Reasoning: "):
+                    st.write(response)
+
+
+                st.title("Reasoning with phi4:14b !!!! ")
+
+                response = get_deepseek_response("phi4:14b", st.session_state.user_music_description, st.session_state.llava_response, USER_INPUT_IMAGE_CAPTION_REASONING_PROMPT)
+                # Display the response
+                with st.expander("llava Reasoning: "):
+                    st.write(response)
+                
+                response = get_deepseek_response("phi4:14b", st.session_state.user_music_description, st.session_state.llama_response, USER_INPUT_IMAGE_CAPTION_REASONING_PROMPT)
+                # Display the response
+                with st.expander("LLama Reasoning: "):
+                    st.write(response)
+
+                response = get_deepseek_response("phi4:14b", st.session_state.user_music_description, st.session_state.gemma_response, USER_INPUT_IMAGE_CAPTION_REASONING_PROMPT)
+                # Display the response
+                with st.expander("Gemma Reasoning: "):
+                    st.write(response)
+                
 
 
         else:

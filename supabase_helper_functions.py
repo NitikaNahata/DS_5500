@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import json
 
 def prepare_data_music_tracks(df: pd.DataFrame):
     # Function to safely convert values to float and check range
@@ -77,3 +78,38 @@ def prepare_data_music_tracks(df: pd.DataFrame):
 
     # Return the list of dictionaries (ready for insertion into the database)
     return all_data
+
+
+def audio_features_to_json(df: pd.DataFrame):
+    """
+    Convert a DataFrame containing audio features to a JSON format suitable for LLM prompting.
+    
+    Parameters:
+    df (pandas.DataFrame): DataFrame with columns for audio features
+    
+    Returns:
+    str: JSON string representation of the audio features
+    """
+    # Ensure the DataFrame has the expected columns
+    expected_columns = [
+        'danceability', 'energy', 'key', 'loudness', 'mode', 
+        'speechiness', 'acousticness', 'instrumentalness', 
+        'liveness', 'valence', 'tempo'
+    ]
+    
+    # Create a dictionary for each row in the DataFrame
+    features_list = []
+    for _, row in df.iterrows():
+        # Extract features as a dictionary
+        features = {}
+        for col in expected_columns:
+            if col in df.columns:
+                features[col] = float(row[col])
+            else:
+                print(f"Warning: Column '{col}' not found in DataFrame")
+        
+        features_list.append(features)
+    
+    # Convert to JSON string with indentation for readability
+    json_str = json.dumps(features_list, indent=2)
+    return json_str

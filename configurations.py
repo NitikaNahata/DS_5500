@@ -1,4 +1,3 @@
-
 LLM_REASONING_MODEL = "deepseek-r1:14b"
 
 LLM_REASONING_MODEL_V2 = "qwq:32b"

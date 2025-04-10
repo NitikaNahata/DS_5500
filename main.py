@@ -136,9 +136,9 @@ async def main():
                             'images': [base64_image]
                         }
                     ]
-                )               
-                st.write("Analysis Result minicpm-v:8b :")
-                st.write(response['message']['content'])
+                )             
+                with st.expander("Analysis Result minicpm-v:8b :"):
+                    st.write(response['message']['content'])
 
                 ## llava-llama3:8b Model
                 response = ollama.chat(
@@ -150,9 +150,9 @@ async def main():
                             'images': [base64_image]
                         }
                     ]
-                )    
-                st.write("Analysis Result llava-llama3:8b:")
-                st.write(response['message']['content'])
+                )
+                with st.expander("Analysis Result llava-llama3:8b:"):    
+                    st.write(response['message']['content'])
 
                 ## bakllava:7b Model
                 response = ollama.chat(
@@ -164,9 +164,9 @@ async def main():
                             'images': [base64_image]
                         }
                     ]
-                )      
-                st.write("Analysis Result bakllava:7b:")
-                st.write(response['message']['content'])
+                )
+                with st.expander("Analysis Result bakllava:7b:"):    
+                    st.write(response['message']['content'])  
 
                 ## lllava-phi3 Model
                 response = ollama.chat(
@@ -179,8 +179,8 @@ async def main():
                         }
                     ]
                 )             
-                st.write("Analysis Result llava-phi3:latest:")
-                st.write(response['message']['content'])
+                with st.expander("Analysis Result llava-phi3:latest:"):    
+                    st.write(response['message']['content'])
 
                 ## granite3.2-vision Model
                 response = ollama.chat(
@@ -193,8 +193,8 @@ async def main():
                         }
                     ]
                 )              
-                st.write("Analysis Result granite3.2-vision:")
-                st.write(response['message']['content'])
+                with st.expander("Analysis Result granite3.2-vision:"):    
+                    st.write(response['message']['content'])
                 
 
                 st.title("REASONING WITH DEEPSEEK !!!! ")

@@ -16,14 +16,44 @@ from pathlib import Path
 from tqdm import tqdm
 import csv
 import time
+import re
 
 # Import configurations - assuming this file exists with the same prompt constants
 from configurations import (
     IMAGE_CAPTIONING_LLVM_PROMPT_V3, 
     USER_INPUT_IMAGE_CAPTION_REASONING_PROMPT,
     LLM_REASONING_MODEL, 
-    LLM_REASONING_MODEL_V2
+    LLM_REASONING_MODEL_V2,
+    USER_INPUT_IMAGE_CAPTION_REASONING_PROMPT_V2
 )
+
+
+def extract_tags_content(content, tags_list):
+    """
+    Extract content from specified tags and return it as a formatted string.
+    
+    Args:
+        content (str): The input text containing tagged content
+        tags_list (list): List of tag names to extract
+    
+    Returns:
+        str: Formatted string with all extracted content
+    """
+    result = []
+    for tag in tags_list:
+        # Regex pattern that handles potential malformed XML and duplicate tags
+        pattern = f"<{tag}>(.*?)</{tag}>"
+        matches = re.findall(pattern, content, re.DOTALL)
+        
+        if matches:
+            for match in matches:
+                # Clean up the extracted content (remove leading/trailing whitespace)
+                cleaned_content = match.strip()
+                # Add the tagged content with a header to the result
+                result.append(f"{cleaned_content}\n")
+    
+    # Join all extracted content with double line breaks for UI display
+    return "\n".join(result)
 
 def encode_image(image_path):
     """Encode image to base64 from file path"""
@@ -50,9 +80,10 @@ def get_vision_model_analysis(model_name, image_base64, prompt):
 def get_reasoning_model_response(model_name, user_description, vision_description, prompt_template):
     """Get response from a reasoning model and track inference time"""
     formatted_prompt = prompt_template.format(
-        user_description=user_description,
-        vision_description=vision_description
+        user_music_description=user_description,
+        image_description=vision_description
     )
+    print("user description is: ", user_description)
     
     start_time = time.time()    
     response = ollama.chat(
@@ -143,9 +174,12 @@ def main():
         # Create a dictionary to map filenames to descriptions
         user_inputs = {}
         
+        #            'bike.jpg': 'Adventure, thrill, high energy, feeling the breeze, adrenaline rush',
+
+
         # Define the mapping directly based on the content provided
         descriptions = {
-            'bike.jpg': 'Adventure, thrill, high energy, feeling the breeze, adrenaline rush',
+            'bike.jpg': 'somehting sad, lonely, alone, giving sad vibes',
             'cafeaesthetic.jpg': 'Enjoying morning breakfast on the curbside, looks like a part of their daily routine, Moderate energy',
             'cafeoutdoor.jpg': 'A quaint, cute cafe, aesthetically pleasing with the flowers. The general vibe would be slow, calm music with low relaxing energy',
             'cafework.jpeg': 'work at cafe, coffee, aesthetic, calm music',
@@ -159,7 +193,21 @@ def main():
             'coffeeposter.jpg': 'Cafe, coffee specialising place. Low tempo, relaxed music',
             'couple.jpg': 'Romantic, well planned outfits, date day, cute and romantic music. Something trendy',
             'dog.jpg': 'sunshine, friendship, cuteness, goofy energy, happiness',
-            'manwithbike.jpg': 'A chill, relaxed vibe of a man with his cycle, calming and regular energy'
+            'manwithbike.jpg': 'A chill, relaxed vibe of a man with his cycle, calming and regular energy',
+            'reddressgirl.jpg':'Fashion,high rise buildings, evening, soemthing trendy',
+            'sadman.jpg':'Sad, raining, feeling lost, lonely, sad energy, ',
+            'kidsplaying.jpg':'Kids playing, high energy, adoration, happy vibes',
+            'fifa.jpg':'Excitement, happiness, proud, FIFA worldcup,high energy, enthusiasm',
+            'familydinner.png':'Celebration, festivity, family  bonding, food, happy vibes, feeling of togetherness,thankful',
+            'beach.png':'Chill, beach, relaxing, day time, vacation, time off , rejuvenate',
+            'photoshoot.png':'Black and White, marriage photos, couple in love, new beginnings, happy romantic songs, with lo tempo, moderate energy, instrumental or emphasis on the lyrics ',
+            'concert.png':'party, celebration, concert, cheering, high energy muis',
+            'holi.jpg':'Indian festival Holi, colorful, enjoyment, happy, child like innocence',
+            'nyc.jpg':'sunset, warm colors, buildings, end of a good day',
+            'gossip.jpg':'Friends, coffee place, planned outfits, catching up, happy vibes, songs related to friendship, moderate energy',
+            'gym.jpg':'gym motivation, hard work, exercise, high energy vibes, sweat - pain and gain',
+            'rollercoaster.png':'thrill, high energy',
+            'winepicnic.png':'Outdoor lunch picnic in the midst of nature, moderate energy, relaxing,'
         }
         
         # Use the hardcoded descriptions
@@ -190,9 +238,9 @@ def main():
         'llama3.2-vision:11b': 'LLama3_2_Vision_11B',
         'gemma3:12b': 'Gemma3_12B',
         'minicpm-v:8b': 'MiniCPM_V_8B',
+        'phi4:14b': 'Phi_14B',
         'llava-llama3:8b': 'LLaVA_LLama3_8B',
         'bakllava:7b': 'BakLLaVA_7B',
-        'llava-phi3:latest': 'LLaVA_Phi3',
         'granite3.2-vision:latest': 'Granite3_2_Vision'
     }
     
@@ -201,7 +249,8 @@ def main():
         'LLaVA_7B',
         'LLama3_2_Vision_11B',
         'Gemma3_12B',
-        'MiniCPM_V_8B'
+        'MiniCPM_V_8B',
+        'Phi_14B'
     ]
     
     reasoning_models = {
@@ -288,9 +337,11 @@ def main():
                                 reasoning_model, 
                                 user_description, 
                                 vision_output, 
-                                USER_INPUT_IMAGE_CAPTION_REASONING_PROMPT
+                                USER_INPUT_IMAGE_CAPTION_REASONING_PROMPT_V2
                             )
-                            row[f'{reasoning_display}_{vision_model_display}_output'] = output
+
+                            cleaned_output = extract_tags_content(output, ['music_recommendation'])
+                            row[f'{reasoning_display}_{vision_model_display}_output'] = cleaned_output
                             
                             # Write inference time to inference times CSV
                             combo_name = f"{reasoning_display}_{vision_model_display}"

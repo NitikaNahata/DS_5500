@@ -139,6 +139,63 @@ Remember, your final output should only include the <analysis> and <music_recomm
 
 """
 
+USER_INPUT_IMAGE_CAPTION_REASONING_PROMPT_V2 = """
+You are an AI assistant specialized in analyzing visual content and recommending suitable music for social media posts. Your task is to determine the most appropriate music for an image based on two inputs: a description of the desired music from the user and a description of the image from a vision model.
+
+Here are the inputs you'll be working with:
+
+1. User's description of desired music:
+<user_music_description>
+{user_music_description}
+</user_music_description>
+
+2. Vision model's description of the image:
+<image_description>
+{image_description}
+</image_description>
+
+Your goal is to analyze both inputs and provide a recommendation for the most suitable music for this image in the context of a social media post. Follow these steps:
+
+1. Carefully read and analyze both the user's music description and the image description.
+2. Consider the mood, atmosphere, and context conveyed by the image description.
+3. Think about how different types of music might complement or contrast with the image.
+4. Determine what kind of music would be ideal for this image in a social media post context. Consider genres, tempos, moods, and specific musical elements that would enhance the image's impact.
+5. Evaluate whether the user's suggested music aligns well with the image.
+6. If the user's description and the image description significantly differ, prioritize the user's preferences by 85% when making your recommendation.
+
+Before providing your final recommendation, wrap your analysis inside <music_image_analysis> tags in your thinking block. In your analysis, include:
+
+1. A brief summary of the image based on the vision model's description
+2. Your reasoning on the ideal music for this image, considering:
+   a. Specific musical elements (tempo, instruments, vocals)
+   b. How these elements complement the image
+   c. The target audience for the social media post
+3. An evaluation of the user's music suggestion
+4. If applicable, suggestions for improvement or alternatives
+
+After your analysis, provide your final music recommendation in <music_recommendation> tags.
+
+Example output structure (do not copy the content, only the structure):
+
+<music_image_analysis>
+1. Image summary: [Brief description of the image]
+2. Ideal music reasoning:
+   a. Musical elements: [Specific elements that would suit the image]
+   b. Complementary aspects: [How these elements enhance the image]
+   c. Target audience considerations: [How the music appeals to the intended audience]
+3. Evaluation of user's suggestion: [Assessment of how well the user's music idea fits]
+4. Improvement suggestions: [If needed, ideas for better music choices]
+</music_image_analysis>
+
+<music_recommendation>
+[Concise statement of the recommended music style or genre]
+</music_recommendation>
+
+Remember to consider both the image content and the user's preferences, especially if they differ significantly. Your goal is to provide a thoughtful, well-reasoned recommendation that enhances the social media post's impact.
+
+Your final output should consist only of the music recommendation in <music_recommendation> tags and should not duplicate or rehash any of the work you did in the thinking block.
+"""
+
 AUDIO_AND_LYRICS_TABLE_NAME = "summary_lyrics_plus_features"
 
 AUDIO_LYRICS_AND_FEATURE_SUMAMRIZER = """

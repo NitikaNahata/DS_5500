@@ -12,7 +12,7 @@ import streamlit as st
 import ollama
 import base64
 import asyncio
-from configurations import IMAGE_CAPTIONING_LLVM_PROMPT, IMAGE_CAPTIONING_LLVM_PROMPT_V2, IMAGE_CAPTIONING_LLVM_PROMPT_V3, USER_INPUT_IMAGE_CAPTION_REASONING_PROMPT, LLM_REASONING_MODEL, LLM_REASONING_MODEL_V2
+from configurations import FINAL_VISION_MODEL, FINAL_REASONING_MODEL, IMAGE_CAPTIONING_LLVM_PROMPT, IMAGE_CAPTIONING_LLVM_PROMPT_V2, IMAGE_CAPTIONING_LLVM_PROMPT_V3, USER_INPUT_IMAGE_CAPTION_REASONING_PROMPT, LLM_REASONING_MODEL, LLM_REASONING_MODEL_V2
 
 def encode_image(image_file):
     return base64.b64encode(image_file.getvalue()).decode('utf-8')
@@ -22,12 +22,12 @@ def initialize_session_states():
         st.session_state.user_music_description = None
     if "user_uploaded_image" not in st.session_state:
         st.session_state.user_uploaded_image = None
-    if "llava_response" not in st.session_state:
-        st.session_state.llava_response = None
-    if "llama_response" not in st.session_state:
-        st.session_state.llama_response = None
-    if "gemma_response" not in st.session_state:
-        st.session_state.gemma_response = None
+    if "final_vision_model_response" not in st.session_state:
+        st.session_state.final_vision_model_response = None
+    if "final_reasoning_model_response" not in st.session_state:
+        st.session_state.final_reasoning_model_response = None
+    if "recommendations_list" not in st.session_state:
+        st.session_state.recommendations_list = None
 
 # Function to extract thinking and content from response
 def parse_response(response):
@@ -64,6 +64,9 @@ def get_deepseek_response(model_name, user_description, vision_description, prom
     # Return the model's response
     return response["message"]["content"]
 
+def get_recommendations_list(reasoning_model_response):
+    return ['SONG 1','SONG 1','SONG 1','SONG 1','SONG 1','SONG 1','SONG 1','SONG 1','SONG 1']
+
 async def main():
     # Initialize session state for resume and job link if they don't exist
     initialize_session_states()
@@ -81,68 +84,9 @@ async def main():
             with st.spinner("Analyzing..."):
                 base64_image = encode_image(st.session_state.user_uploaded_image)
                 
-                ## LLaVA Model
+                ## Reasoning Model
                 response = ollama.chat(
-                    model='llava:7b',
-                    messages=[
-                        {
-                            'role': 'user',
-                            'content': IMAGE_CAPTIONING_LLVM_PROMPT_V3,
-                            'images': [base64_image]
-                        }
-                    ]
-                )         
-                with st.expander("Analysis Result LLaVA 7B: "):
-                    st.write(response['message']['content'])
-                st.session_state.llava_response = response['message']['content']
-
-                ## LLama 3.2 Vision 11B Model
-                response = ollama.chat(
-                    model='llama3.2-vision:11b',
-                    messages=[
-                        {
-                            'role': 'user',
-                            'content': IMAGE_CAPTIONING_LLVM_PROMPT_V3,
-                            'images': [base64_image]
-                        }
-                    ]
-                )               
-                with st.expander("Analysis Result llama3.2-vision:11b: "):
-                    st.write(response['message']['content'])
-                st.session_state.llama_response = response['message']['content']
-
-                ## gemma3:12b Model
-                response = ollama.chat(
-                    model='gemma3:12b',
-                    messages=[
-                        {
-                            'role': 'user',
-                            'content': IMAGE_CAPTIONING_LLVM_PROMPT_V3,
-                            'images': [base64_image]
-                        }
-                    ]
-                )               
-                with st.expander("Analysis Result lAnalysis Result gemma3:12b: "):
-                    st.write(response['message']['content'])
-                st.session_state.gemma_response = response['message']['content']
-                      
-                ## minicpm-v: Model
-                response = ollama.chat(
-                    model='minicpm-v:8b',
-                    messages=[
-                        {
-                            'role': 'user',
-                            'content': IMAGE_CAPTIONING_LLVM_PROMPT_V3,
-                            'images': [base64_image]
-                        }
-                    ]
-                )             
-                with st.expander("Analysis Result minicpm-v:8b :"):
-                    st.write(response['message']['content'])
-
-                ## llava-llama3:8b Model
-                response = ollama.chat(
-                    model='llava-llama3:8b',
+                    model=FINAL_VISION_MODEL,
                     messages=[
                         {
                             'role': 'user',
@@ -151,126 +95,18 @@ async def main():
                         }
                     ]
                 )
-                with st.expander("Analysis Result llava-llama3:8b:"):    
-                    st.write(response['message']['content'])
+                st.session_state.final_vision_model_response = response['message']['content']
 
-                ## bakllava:7b Model
-                response = ollama.chat(
-                    model='bakllava:7b',
-                    messages=[
-                        {
-                            'role': 'user',
-                            'content': IMAGE_CAPTIONING_LLVM_PROMPT_V3,
-                            'images': [base64_image]
-                        }
-                    ]
-                )
-                with st.expander("Analysis Result bakllava:7b:"):    
-                    st.write(response['message']['content'])  
-
-                ## lllava-phi3 Model
-                response = ollama.chat(
-                    model='llava-phi3:latest',
-                    messages=[
-                        {
-                            'role': 'user',
-                            'content': IMAGE_CAPTIONING_LLVM_PROMPT_V3,
-                            'images': [base64_image]
-                        }
-                    ]
-                )             
-                with st.expander("Analysis Result llava-phi3:latest:"):    
-                    st.write(response['message']['content'])
-
-                ## granite3.2-vision Model
-                response = ollama.chat(
-                    model='granite3.2-vision:latest',
-                    messages=[
-                        {
-                            'role': 'user',
-                            'content': IMAGE_CAPTIONING_LLVM_PROMPT_V3,
-                            'images': [base64_image]
-                        }
-                    ]
-                )              
-                with st.expander("Analysis Result granite3.2-vision:"):    
-                    st.write(response['message']['content'])
-                
-
-                st.title("REASONING WITH DEEPSEEK !!!! ")
+                st.title("REASONING Model !!!! ")
 
                 ## LLM Reasoning
-                response = get_deepseek_response(LLM_REASONING_MODEL, st.session_state.user_music_description, st.session_state.llava_response, USER_INPUT_IMAGE_CAPTION_REASONING_PROMPT)
+                st.session_state.final_reasoning_model_response = get_deepseek_response(FINAL_REASONING_MODEL, st.session_state.user_music_description, st.session_state.llava_response, USER_INPUT_IMAGE_CAPTION_REASONING_PROMPT)
                 # Display the response
-                with st.expander("LLaVA resoning: "):
-                    st.write(response)
+                st.write(st.session_state.final_reasoning_model_response )
 
-                response = get_deepseek_response(LLM_REASONING_MODEL, st.session_state.user_music_description, st.session_state.llama_response, USER_INPUT_IMAGE_CAPTION_REASONING_PROMPT)
-                # Display the response
-                with st.expander("LLama Reasoning: "):
-                    st.write(response)
-                
-                response = get_deepseek_response(LLM_REASONING_MODEL, st.session_state.user_music_description, st.session_state.gemma_response, USER_INPUT_IMAGE_CAPTION_REASONING_PROMPT)
-                # Display the response
-                with st.expander("Gemma Reasoning: "):
-                    st.write(response)
-                
-
-                st.title("REASONING WITH mychen76/llama3.1-intuitive-thinker:chain-of-thoughts.q5 !!!! ")
-
-                response = get_deepseek_response("mychen76/llama3.1-intuitive-thinker:chain-of-thoughts.q5", st.session_state.user_music_description, st.session_state.llava_response, USER_INPUT_IMAGE_CAPTION_REASONING_PROMPT)
-                # Display the response
-                with st.expander("Llava Reasoning: "):
-                    st.write(response)
-                
-                response = get_deepseek_response("mychen76/llama3.1-intuitive-thinker:chain-of-thoughts.q5", st.session_state.user_music_description, st.session_state.llama_response, USER_INPUT_IMAGE_CAPTION_REASONING_PROMPT)
-                # Display the response
-                with st.expander("LLama Reasoning: "):
-                    st.write(response)
-
-                response = get_deepseek_response("mychen76/llama3.1-intuitive-thinker:chain-of-thoughts.q5", st.session_state.user_music_description, st.session_state.gemma_response, USER_INPUT_IMAGE_CAPTION_REASONING_PROMPT)
-                # Display the response
-                with st.expander("Gemma Reasoning: "):
-                    st.write(response)
-
-                
-
-                st.title("REASONING WITH huihui_ai/deepseek-r1-abliterated:14b !!!! ")
-
-                response = get_deepseek_response("huihui_ai/deepseek-r1-abliterated:14b", st.session_state.user_music_description, st.session_state.llava_response, USER_INPUT_IMAGE_CAPTION_REASONING_PROMPT)
-                # Display the response
-                with st.expander("llava Reasoning: "):
-                    st.write(response)
-                
-                response = get_deepseek_response("huihui_ai/deepseek-r1-abliterated:14b", st.session_state.user_music_description, st.session_state.llama_response, USER_INPUT_IMAGE_CAPTION_REASONING_PROMPT)
-                # Display the response
-                with st.expander("LLama Reasoning: "):
-                    st.write(response)
-
-                response = get_deepseek_response("huihui_ai/deepseek-r1-abliterated:14b", st.session_state.user_music_description, st.session_state.gemma_response, USER_INPUT_IMAGE_CAPTION_REASONING_PROMPT)
-                # Display the response
-                with st.expander("Gemma Reasoning: "):
-                    st.write(response)
-
-
-                st.title("Reasoning with phi4:14b !!!! ")
-
-                response = get_deepseek_response("phi4:14b", st.session_state.user_music_description, st.session_state.llava_response, USER_INPUT_IMAGE_CAPTION_REASONING_PROMPT)
-                # Display the response
-                with st.expander("llava Reasoning: "):
-                    st.write(response)
-                
-                response = get_deepseek_response("phi4:14b", st.session_state.user_music_description, st.session_state.llama_response, USER_INPUT_IMAGE_CAPTION_REASONING_PROMPT)
-                # Display the response
-                with st.expander("LLama Reasoning: "):
-                    st.write(response)
-
-                response = get_deepseek_response("phi4:14b", st.session_state.user_music_description, st.session_state.gemma_response, USER_INPUT_IMAGE_CAPTION_REASONING_PROMPT)
-                # Display the response
-                with st.expander("Gemma Reasoning: "):
-                    st.write(response)
-                
-
+                st.session_state.recommendations_list = get_recommendations_list(st.session_state.final_reasoning_model_response)
+                st.write("Music Recommendations: ")
+                st.write(st.session_state.recommendations_list)
 
         else:
             st.warning("Please upload an image and enter a prompt.")

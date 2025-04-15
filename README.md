@@ -87,7 +87,8 @@ Install the required packages using pip:
 pip install -r requirements.txt
 
 ### 4. Pull the Large Language Vision Model from ollama
-Run this command in terminal -> ollama run llava:7b
+Run this command in terminal -> ollama pull minicpm-v:8b
+Run this command in terminal -> ollama pull deepseek-r1:14b
 
 ### 5. Run the streamlit web-app
 streamlit run main.py

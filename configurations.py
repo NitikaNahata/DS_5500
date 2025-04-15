@@ -1,3 +1,25 @@
+FINAL_VISION_MODEL = "minicpm-v:8b"
+
+FINAL_REASONING_MODEL = "deepseek-r1:14b"
+
+IMAGE_CAPTIONING_LLVM_PROMPT_old = """
+Analyze the image and provide a detailed response in keywords only. Follow the structure below:
+ 
+ Example 1:
+ Image Description: A calm forest scene with tall trees, soft sunlight filtering through leaves, and a small stream.
+ 1. Main Theme(s): Serenity and Tranquility, Intimacy and Connection.
+ 2. Key Elements: Green trees, soft lighting, flowing water.
+ 3. Emotional Tone: Peaceful, refreshing.
+ 4. Suggested Music Traits: High acousticness, low tempo, moderate valence.
+ 
+ Example 2:
+ Image Description: A bustling city street at night with bright neon lights and people walking.
+ 1. Main Theme(s): Energy and Vitality, Mystery and Intrigue.
+ 2. Key Elements: Neon lights, crowded streets, night sky.
+ 3. Emotional Tone: Exciting, vibrant.
+ 4. Suggested Music Traits: High energy, high tempo, low acousticness.
+"""
+
 LLM_REASONING_MODEL = "deepseek-r1:14b"
 
 LLM_REASONING_MODEL_V2 = "qwq:32b"
